@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Meri Jaan ❤️</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --blush-100: #fff0f6;
+                --blush-200: #ffd6e8;
+                --blush-300: #ffc1df;
+                --rose-gold: #e58aa0;
+                --rose-dark: #b03a57;
+                --gold-accent: #f0c27b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff0f6 0%, #ffd6e8 40%, #fff5f8 100%);
+            color: #4a2030;
+            overflow-x: hidden;
+        }
+
+        .font-dancing { font-family: 'Dancing Script', cursive; }
+        .font-serif-title { font-family: 'Playfair Display', serif; }
+
+        /* Custom Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(212, 139, 151, 0.12);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(212, 139, 151, 0.22);
+        }
+
+        /* 3D Flip Card Effect */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Ken Burns Effect for Images */
+        .ken-burns {
+            animation: kenburns 12s ease-in-out infinite alternate;
+        }
+
+        .gallery-shell {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,245,248,0.7));
+            border: 1px solid rgba(255, 181, 203, 0.5);
+        }
+
+        .gallery-stage {
+            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,241,246,0.9));
+            box-shadow: 0 24px 60px rgba(185, 94, 120, 0.12);
+        }
+
+        .gallery-nav-btn {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.72);
+            box-shadow: 0 10px 24px rgba(201, 110, 142, 0.18);
+        }
+
+        .gallery-note-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,243,246,0.9));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        /* Ensure main gallery and lightbox images fit fully */
+        #gallery-img, #lightbox-img {
+            object-fit: contain;
+            background-color: rgba(255,240,247,0.6);
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(1deg); }
+        }
+
+        /* Floating Hearts Particles */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 8s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Shower hearts used by showerLove() */
+        .shower-heart {
+            position: absolute;
+            pointer-events: none;
+            font-size: 18px;
+            will-change: transform, opacity;
+            animation: showerUp 2s linear forwards;
+        }
+
+        @keyframes showerUp {
+            0% { transform: translateY(0) scale(0.6); opacity: 1; }
+            100% { transform: translateY(-60vh) translateX(var(--sx, 0px)) rotate(360deg) scale(1); opacity: 0; }
+        }
+
+        /* Envelope Styles */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f7d6dc;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(158, 59, 77, 0.2);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #e8b0bb;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.2s;
+            z-index: 3;
+        }
+
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #b83248, #801d2d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 4;
+            transition: all 0.4s;
+        }
+
+        /* Pulse glow */
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 139, 151, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(212, 139, 151, 0.8); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff5f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e8b0bb;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative">
+
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <div id="surprise-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#fff0f3] via-[#ffe4e6] to-[#fdf2f8] transition-opacity duration-1000">
+        <div class="text-center mb-8">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-white/80 border border-rose-300 text-rose-600 text-xs tracking-widest uppercase mb-3 font-semibold shadow-sm">
+                A Surprise For You ✨
+            </span>
+            <h1 class="text-3xl md:text-5xl font-serif-title font-bold text-[#801d2d]">For My Beautiful Wife 💌</h1>
+            <p class="text-rose-700/80 mt-2 text-sm md:text-base font-light">Tap the envelope to unlock your birthday magic!</p>
+        </div>
+
+        <div class="envelope-wrapper pulse-glow rounded-2xl p-2" onclick="openSurprise()">
+            <div class="envelope flex items-center justify-center relative overflow-hidden">
+                <div class="wax-seal">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <p class="text-rose-800 font-dancing text-2xl z-2 mt-8">Meri Jaan</p>
+            </div>
+        </div>
+
+        <button onclick="openSurprise()" class="mt-10 px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-medium shadow-lg hover:shadow-rose-300/50 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2">
+            <span>Tap To Open</span>
+            <i class="fas fa-magic"></i>
+        </button>
+    </div>
+
+    <nav class="sticky top-0 z-40 w-full glass-card border-b border-rose-100/50 px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl text-rose-500 font-dancing font-bold">Meri Jaan</span>
+            <i class="fas fa-heart text-rose-400 text-xs animate-bounce"></i>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button id="audio-toggle" onclick="toggleAudio()" class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center hover:bg-rose-200 transition-colors" title="Toggle Music">
+                <i class="fas fa-music" id="audio-icon"></i>
+            </button>
+            <button onclick="showerLove()" class="px-4 py-2 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs md:text-sm font-medium shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center gap-1.5">
+                <i class="fas fa-heart"></i>
+                <span>Shower Love</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 md:py-12 relative z-10 space-y-16">
+
+        <!-- Hero Header Section -->
+        <section class="text-center space-y-6 pt-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-xs md:text-sm font-medium">
+                <i class="fas fa-crown text-amber-500"></i>
+                <span>10th October • Happy Birthday My Queen!</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif-title font-bold text-rose-950 leading-tight">
+                Happy Birthday <br class="md:hidden"/>
+                <span class="font-dancing text-rose-600 text-5xl md:text-7xl lg:text-8xl inline-block px-2">Meri Jaan!</span> 🎂✨
+            </h1>
+
+            <p class="text-base md:text-xl text-rose-900/80 max-w-2xl mx-auto font-light leading-relaxed">
+                Celebrating the day my world became beautiful! Tum meri zindagi ki sabse haseen khushi ho.
+            </p>
+
+            <!-- Days Together Counter -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto pt-4">
+                <!-- Proposal Counter Card -->
+                <div class="glass-card glass-card-hover p-6 rounded-3xl text-center space-y-2 relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl"><i class="fas fa-ring"></i></div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-rose-500">Since Proposal (28 Dec 2023) 💍</span>
+                    <div id="proposal-counter" class="text-2xl md:text-3xl font-bold text-rose-900 font-serif-title">
+                        Loading days...
+                    </div>
+                    <p class="text-xs text-rose-700/70">"Jab maine tumhe propose kiya tha!"</p>
+                </div>
+
+                <!-- Dating Counter Card -->
+                <div class="glass-card glass-card-hover p-6 rounded-3xl text-center space-y-2 relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl"><i class="fas fa-heart"></i></div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-rose-500">Since Dating Start (15 June 2024) ❤️</span>
+                    <div id="dating-counter" class="text-2xl md:text-3xl font-bold text-rose-900 font-serif-title">
+                        Loading days...
+                    </div>
+                    <p class="text-xs text-rose-700/70">"Hamaari prem kahani ka official chapter!"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="space-y-8">
+            <div class="text-center space-y-2">
+                <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold">Our Journey</span>
+                <h2 class="text-3xl md:text-4xl font-serif-title font-bold text-rose-950">Special Dates In Our Life ✨</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Proposal Milestone -->
+                <div class="glass-card glass-card-hover p-6 rounded-3xl border-t-4 border-rose-400 space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold">
+                        💍
+                    </div>
+                    <div>
+                        <span class="text-xs text-rose-500 font-medium">28th December 2023</span>
+                        <h3 class="text-lg font-bold text-rose-900 font-serif-title">The Proposal Day</h3>
+                    </div>
+                    <p class="text-sm text-rose-900/80 font-light leading-relaxed">
+                        "Jab maine tumhe propose kiya tha... That was the best decision of my entire life! Woh moment hamesha mere dil ke sabse kareeb rahega."
+                    </p>
+                </div>
+
+                <!-- Dating Milestone -->
+                <div class="glass-card glass-card-hover p-6 rounded-3xl border-t-4 border-pink-400 space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-xl font-bold">
+                        ❤️
+                    </div>
+                    <div>
+                        <span class="text-xs text-rose-500 font-medium">15th June 2024</span>
+                        <h3 class="text-lg font-bold text-rose-900 font-serif-title">Official Dating Start</h3>
+                    </div>
+                    <p class="text-sm text-rose-900/80 font-light leading-relaxed">
+                        "Hamaari prem kahani ka official chapter shuru hua. Us din ke baad se meri life aur bhi haseen aur khoobsurat ho gayi!"
+                    </p>
+                </div>
+
+                <!-- Birthday Milestone -->
+                <div class="glass-card glass-card-hover p-6 rounded-3xl border-t-4 border-amber-400 space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">
+                        👑
+                    </div>
+                    <div>
+                        <span class="text-xs text-rose-500 font-medium">10th October</span>
+                        <h3 class="text-lg font-bold text-rose-900 font-serif-title">Birthday Celebration</h3>
+                    </div>
+                    <p class="text-sm text-rose-900/80 font-light leading-relaxed">
+                        "Tumhaara special din, meri rani! Aaj ke din bas tumhare mukhde pe pyaari si smile dekhna meri sabse badi khwahish hai."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beautiful Photo Gallery Section -->
+        <section id="gallery" class="space-y-8 pt-6">
+            <div class="text-center space-y-2">
+                <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold">Memory Lane</span>
+                <h2 class="text-3xl md:text-4xl font-serif-title font-bold text-rose-950">Our Lovely Moments 📸</h2>
+                <p class="text-sm text-rose-700/70">A little walk through the moments that made our story beautiful.</p>
+            </div>
+
+            <div class="gallery-shell rounded-[2rem] p-4 md:p-8 max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
+                <div class="gallery-stage rounded-[1.7rem] p-3 md:p-5 relative">
+                    <div class="relative mx-auto max-w-2xl">
+                        <div class="relative overflow-hidden rounded-[1.5rem] bg-rose-50 shadow-[0_25px_50px_rgba(197,103,139,0.18)] border border-rose-100">
+                            <img id="gallery-img" src="" alt="Memory Photo" class="w-full h-[420px] md:h-[520px] object-cover ken-burns cursor-pointer transition duration-500" onclick="openLightbox()" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent"></div>
+
+                            <button onclick="prevPhoto()" class="gallery-nav-btn absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full text-rose-600 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-lg active:scale-90 z-10">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button onclick="nextPhoto()" class="gallery-nav-btn absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full text-rose-600 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-lg active:scale-90 z-10">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+
+                            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-4 z-10">
+                                <span id="gallery-counter-badge" class="text-xs font-semibold text-white bg-black/35 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20">Photo 1 of 9</span>
+                                <button onclick="openLightbox()" class="text-white text-xs bg-black/35 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20 hover:bg-black/50 transition-all flex items-center gap-2">
+                                    <i class="fas fa-expand"></i>
+                                    <span>View</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-note-box mt-6 mx-auto max-w-2xl text-center p-5 md:p-6 rounded-[1.5rem] border border-rose-200/70">
+                        <p id="gallery-note" class="text-base md:text-xl text-rose-900 font-serif-title italic leading-relaxed">
+                            Loading note...
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-4 mt-6">
+                        <button id="autoplay-btn" onclick="toggleAutoplay()" class="px-5 py-2.5 rounded-full bg-rose-100 text-rose-700 text-xs font-semibold hover:bg-rose-200 transition-all flex items-center gap-2 shadow-sm">
+                            <i class="fas fa-play" id="autoplay-icon"></i>
+                            <span id="autoplay-text">Auto Play</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Love Flip Cards Section -->
+        <section class="space-y-8 pt-6">
+            <div class="text-center space-y-2">
+                <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold">From My Heart</span>
+                <h2 class="text-3xl md:text-4xl font-serif-title font-bold text-rose-950">Reasons & Promises 💖</h2>
+                <p class="text-sm text-rose-700/70">Hover or tap on any card to flip and read!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Why I Love You -->
+                <div class="flip-card h-64 perspective-1000 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-card p-6 flex flex-col items-center justify-center text-center border border-rose-200">
+                            <div class="w-14 h-14 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-2xl mb-3">
+                                ❤️
+                            </div>
+                            <h3 class="text-xl font-bold font-serif-title text-rose-900">Why I Love You</h3>
+                            <p class="text-xs text-rose-400 mt-2">Tap to flip <i class="fas fa-sync-alt ml-1"></i></p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-600 to-pink-500 text-white p-6 flex flex-col items-center justify-center text-center shadow-xl">
+                            <p class="text-sm leading-relaxed font-light">
+                                "Tumhari hasi, tumhari shanti, aur tumhaari presence hi meri duniya ko sabse beautiful bana deti hai. I love you more than words can say."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Promise -->
+                <div class="flip-card h-64 perspective-1000 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-card p-6 flex flex-col items-center justify-center text-center border border-rose-200">
+                            <div class="w-14 h-14 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-2xl mb-3">
+                                ✨
+                            </div>
+                            <h3 class="text-xl font-bold font-serif-title text-rose-900">My Promise</h3>
+                            <p class="text-xs text-rose-400 mt-2">Tap to flip <i class="fas fa-sync-alt ml-1"></i></p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-pink-500 to-red-500 text-white p-6 flex flex-col items-center justify-center text-center shadow-xl">
+                            <p class="text-sm leading-relaxed font-light">
+                                "Main har din tumhe izzat, pyaar, sukoon, aur hamesha ke liye apni sabse badi priority bana ke rakhega. Tum meri sabse badi blessing ho."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Secret Message -->
+                <div class="flip-card h-64 perspective-1000 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-card p-6 flex flex-col items-center justify-center text-center border border-rose-200">
+                            <div class="w-14 h-14 rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-2xl mb-3">
+                                🤫
+                            </div>
+                            <h3 class="text-xl font-bold font-serif-title text-rose-900">Secret Message</h3>
+                            <p class="text-xs text-rose-400 mt-2">Tap to flip <i class="fas fa-sync-alt ml-1"></i></p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-600 to-red-500 text-white p-6 flex flex-col items-center justify-center text-center shadow-xl">
+                            <p class="text-sm leading-relaxed font-light">
+                                "Tum sirf meri wife nahi ho, meri soulmate, mera ghar, aur mera saara sukoon ho. Happy Birthday Meri Jaan ❤️"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promise Hug & Kiss Modal Trigger -->
+            <div class="text-center pt-4">
+                <button onclick="openPromiseModal()" class="px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 text-white font-semibold text-sm shadow-xl hover:shadow-rose-300/60 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3 mx-auto">
+                    <span>Tap for a Surprise Hug & Kiss Promise 💋</span>
+                    <i class="fas fa-sparkles"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Final Love Letter Section -->
+        <section class="glass-card rounded-3xl p-8 md:p-12 text-center space-y-6 max-w-3xl mx-auto border border-rose-200">
+            <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-3xl mx-auto">
+                💌
+            </div>
+            <h2 class="text-3xl font-serif-title font-bold text-rose-950">A Letter For You</h2>
+            <p class="text-base md:text-lg text-rose-900/90 leading-relaxed font-light italic">
+                "Meri pyaari wife, 10th October tumhara birthday hai par sach toh yeh hai ki gift mujhe mila hai - tumhare roop mein! 28th Dec 2023 ko jab maine tumhe propose kiya, tab mujhe pata tha ki meri life badalne wali hai. Aur 15th June 2024 se ab tak ka har din ek khubsurat sapne jaisa laga hai. God bless you with endless health, joy, and laughter!"
+            </p>
+            <p class="font-dancing text-3xl text-rose-600 font-bold">Forever Yours ❤️</p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-xs text-rose-800/60 relative z-10 border-t border-rose-200/40 mt-12">
+        <p>Made with all my heart for my beloved Wife ❤️ • Happy Birthday!</p>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex flex-col items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-3xl hover:text-rose-400 transition-colors" onclick="closeLightbox()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <button id="lightbox-prev" class="absolute left-5 md:left-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all shadow-lg" onclick="event.stopPropagation(); prevPhotoInLightbox();">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="lightbox-next" class="absolute right-5 md:right-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all shadow-lg" onclick="event.stopPropagation(); nextPhotoInLightbox();">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <img id="lightbox-img" src="" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain border-2 border-white/20" />
+        <p id="lightbox-note" class="text-white text-center mt-4 max-w-xl text-base md:text-lg font-serif-title italic px-4"></p>
+    </div>
+
+    <!-- Surprise Hug & Kiss Promise Modal -->
+    <div id="promise-modal" class="fixed inset-0 z-50 bg-rose-950/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card bg-white/95 rounded-3xl p-8 max-w-md text-center space-y-6 shadow-2xl border border-rose-200 transform animate-bounce-short">
+            <div class="text-5xl">💋🤗✨</div>
+            <h3 class="text-2xl font-serif-title font-bold text-rose-900">Infinite Hugs & Kisses!</h3>
+            <p class="text-sm text-rose-800/90 leading-relaxed font-light">
+                I promise to give you unlimited warm hugs whenever you need, 1000s of sweet kisses today, and love you more and more with every passing second! ❤️
+            </p>
+            <button onclick="closePromiseModal()" class="w-full py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-medium shadow-md hover:opacity-95 transition-opacity">
+                Awww, Thank You My Love! 🥰
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Auto-load all images from the project folder into the gallery
+        const allImages = [
+            '01529db7-60d6-4c74-a9e8-cb92d331506f.jpg','02E0E68B-EEBF-4C31-BDE0-5ADFAF54A0B5.jpg','0c20fb95-fb42-4e39-95ed-a41a7eb7dff8.jpg','0C6852A5-80B2-4F56-9BCF-FA2368C7FCCF.jpg','0d2cfee5-d4cc-4476-8652-6fade21ebfaf.jpg','0D716520-328E-4A39-87B0-527CFFFBC51E.jpg','15beaeb7-1090-4d41-a884-54543a61c838.jpg','1ab7c1f2-0085-40a7-9621-c40248619cf0.jpg','1d03ca58-1c1d-4782-98e5-0f1a2b18d61b.jpg','1dd4e2c0-54fc-42f7-bd85-754151c794f5.jpg','1F8BB64F-1B71-45BA-8525-18B4A79A1B60.jpg','20b0dd1d-933e-496b-9d3c-95b49cf01740.jpg','23a4dfc6-e49a-4ac8-bbd4-c719a67bffce.jpg','27E18A16-D92B-4E1F-A7B0-7BDCD2359E6A.jpg','2aa6bed5-17ad-4aa7-a77a-b965aeeef07e.jpg','2bba52a8-85a5-4ea4-b718-b46b6b335f85.jpg','2bbdc1a2-7b9b-4918-8b57-10b5f0c6316d.jpg','2eafd57a-adc7-40b7-89b1-2a8c48838fb9.jpg','2F8958B1-BB37-46C1-8972-2C182D5750B6.jpg','37d8a3e5-e6ac-4c8a-88db-bbf6b981c2a0.jpg','3abf0801-8b0d-4c40-833a-8c3305037809.jpg','3d4c72fc-ee12-43d8-a3d3-d97ae49fff82.jpg','3de1b1c3-77c3-4df7-a713-bd94b9031930.jpg','3e0e9e40-d58b-4326-a515-47492716ef07.jpg','408f5293-8a02-4e32-aea9-af4e988ac1e4.jpg','41e007df-7305-4509-ac5c-6ee15447e48d.jpg','41f2c8eb-833d-4b1b-83eb-32a464e068c7.jpg','44d3c1af-a88b-40af-b329-dac99b1f5b45.jpg','471a10d5-e1db-4179-a0e6-9bb7781013d4.jpg','4C96688B-475D-4991-BF58-AEF1AA63EF37.jpg','4f8a89a1-c010-4dd1-aa6d-f85c552124ea.jpg','5059b245-e514-4302-a96e-ba696fb21af4.jpg','512f55aa-3bbd-452e-854d-fb26cc24832d.jpg','52b817b5-1be8-4215-a9e9-af3faa1d29e9.jpg','53ebe986-ab93-4d5b-aef4-e4970c5e9e51.jpg','57A83530-4965-4A90-8895-5B8052CCCC55.jpg','5cd9a113-dc28-49fb-a8ea-9850b7cec840.jpg','5d546788-92b7-4bbd-9095-c0a5d938b584.jpg','5ddb33cb-ff38-43ff-8799-deb5c6eb8d9d.jpg','5e493694-8f35-4f02-b586-20e665747de3.jpg','5e8b7589-8841-41e9-a3ef-c8a85412096e.jpg','5f40a05a-f730-4694-95b9-abb3c9f1f6b8.jpg','66563c6d-58d3-4910-a399-1b1edc6fe7ba.jpg','6B07326B-F1EE-45C0-9C88-46277FF47B7C.jpg','6f310c13-2655-4831-a63f-8ebc8d3aa74d.jpg','6FEE0A9A-AEEE-43FD-B3E4-F93B971B35F8.jpg','772dc625-124d-4b02-81e1-986c41534d24.jpg','7B7BCCE5-5710-41BF-9115-21C08D912803.jpg','7ddb1360-3c1c-4ba7-b191-a3b2b262b8a9.jpg','7eeef20b-e53f-46e5-afcd-0efe890eb1c6.jpg','7f6b357b-b4b3-4d85-a677-adf35bfe9fd1.jpg','7fc8b83f-1f4a-48ca-90ed-c4df1ff0224b.jpg','8cf44ea4-cc71-4c89-a1c8-0faa4bd6faa9.jpg','96c36200-8f63-42e8-a5f2-90bdd1100933.jpg','9c5a5939-19af-4e44-9f59-2a2dc9308b24.jpg','9E3CB907-ADA3-4DA7-A9B3-9EF688B09625.jpg','A339EE1F-AFD0-4598-8115-6CDC48D059DB.jpg','a4706970-9eff-45e3-978e-e4dd6eba0355.jpg','a7ab1cb5-ea82-4cc0-9eeb-5178af2896fd.jpg','a9df53ff-6b62-4626-b529-17d56e4e81af.jpg','aabe6202-378a-4c02-9fc8-9a703670b83a.jpg','ad47b15b-3001-4a3e-8309-61b8ca615b5b.jpg','b661f68d-dfc2-4f4e-8f82-bb1aefa5073d.jpg','f25fabf2-ff46-47b1-99ed-919a788fcc14.jpg','IMG_0050.JPEG','IMG_0051.JPEG','IMG_0052.JPEG','IMG_0053.JPEG','IMG_0099.JPG','IMG_0101.JPG','IMG_0103.JPG','IMG_0105.JPG','IMG_0106.JPG','IMG_0108.JPG','IMG_0110.JPG','IMG_0112.JPG','IMG_0116.JPG','IMG_0117.JPG','IMG_0118.JPG','IMG_0229.JPG','IMG_0232.JPG','IMG_0337.JPG','IMG_0489.JPG','IMG_0493.JPG','IMG_0520.JPG','IMG_0521.JPG','IMG_0522.JPG','IMG_0523.JPG','IMG_0524.JPG','IMG_0709.JPG','IMG_0713.JPG','IMG_0715.JPG','IMG_0716.JPG','IMG_0717.JPG','IMG_0733.JPG','IMG_0735.JPG','IMG_0805.JPG','IMG_0806.JPG','IMG_0807.JPG','IMG_0808.JPG','IMG_1342.JPEG','IMG_2531.PNG','IMG_2613.JPEG','IMG_2614.JPEG','IMG_2618.JPG','IMG_2619.JPG','IMG_2624.JPG','IMG_2668.JPG','IMG_3047.JPEG','IMG_3048.JPEG','IMG_3049.JPG','IMG_3050.JPG','IMG_3128.JPG','IMG_3129.JPG','IMG_3375.JPG','IMG_3376.JPG','IMG_3377.JPG','IMG_3378.JPG','IMG_3379.JPG','IMG_3533.JPG','IMG_3534.JPG','IMG_3535.JPG','IMG_3537.JPG','IMG_3538.JPG','IMG_3548.JPG','IMG_3550.JPG','IMG_3551.JPG','IMG_3553.JPG','IMG_3554.JPG','IMG_3562.JPG','IMG_3564.JPG','IMG_3646.JPG','IMG_3647.JPG','IMG_3648.JPG','IMG_3649.JPG','IMG_3651.JPG','IMG_7900.JPEG','IMG_8021.JPEG','IMG_8146.JPEG','IMG_8252.JPG','IMG_8253.JPG','IMG_8255.JPG','IMG_8256.JPG','IMG_8257.JPG','IMG_8258.JPG','IMG_8259.JPG','IMG_8261.JPG','IMG_8321.JPEG','IMG_8571.JPG','IMG_8572.JPG','IMG_8574.JPG','IMG_8588.JPG','IMG_8590.JPG','IMG_8612.JPG','IMG_8613.JPG','IMG_8614-1.JPG','IMG_8616-1.JPG','IMG_8616.JPG','IMG_8618.JPG','IMG_8620.JPG','IMG_8653.JPEG'
+        ];
+
+        // Create photos array with simple default notes (will use all images)
+        const photos = allImages.map((file) => ({
+            url: `10%20img/${file}`,
+            note: 'A special memory with you ❤️'
+        }));
+
+        let currentIndex = 0;
+        let isAutoplay = false;
+        let autoplayTimer = null;
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let synthInterval = null;
+
+        // Calculate Days Together
+        function updateCounters() {
+            const now = new Date();
+
+            // Proposal: 28 Dec 2023
+            const proposalDate = new Date('2023-12-28T00:00:00');
+            const proposalDiff = now - proposalDate;
+            const proposalDays = Math.floor(proposalDiff / (1000 * 60 * 60 * 24));
+            document.getElementById('proposal-counter').innerText = `${proposalDays} Days Together`;
+
+            // Dating Start: 15 June 2024
+            const datingDate = new Date('2024-06-15T00:00:00');
+            const datingDiff = now - datingDate;
+            const datingDays = Math.floor(datingDiff / (1000 * 60 * 60 * 24));
+            document.getElementById('dating-counter').innerText = `${datingDays} Days Together`;
+        }
+
+        // Initialize Gallery
+        function initGallery() {
+            updateGalleryDisplay();
+        }
+
+        function updateGalleryDisplay() {
+            const photo = photos[currentIndex];
+            const imgEl = document.getElementById('gallery-img');
+            const noteEl = document.getElementById('gallery-note');
+            const badgeEl = document.getElementById('gallery-counter-badge');
+
+            // Smooth transition effect
+            imgEl.style.opacity = '0';
+            noteEl.style.opacity = '0';
+
+            setTimeout(() => {
+                imgEl.src = photo.url;
+                noteEl.innerText = `"${photo.note}"`;
+                badgeEl.innerText = `Photo ${currentIndex + 1} of ${photos.length}`;
+                // Ensure image fully fits slide
+                adjustImageFit(imgEl, photo.url, true);
+                imgEl.style.opacity = '1';
+                noteEl.style.opacity = '1';
+            }, 200);
+        }
+
+        // Helper to set object-fit to 'contain' so images fully fit slides/lightbox
+        function adjustImageFit(imgEl, src, alwaysContain = true) {
+            try {
+                const tmp = new Image();
+                tmp.onload = () => {
+                    if (alwaysContain) {
+                        imgEl.style.objectFit = 'contain';
+                        imgEl.style.backgroundColor = 'rgba(255,240,247,0.6)';
+                    } else {
+                        // fallback: choose contain for portraits
+                        const isPortrait = tmp.naturalHeight > tmp.naturalWidth;
+                        imgEl.style.objectFit = isPortrait ? 'contain' : 'cover';
+                        imgEl.style.backgroundColor = isPortrait ? 'rgba(255,240,247,0.6)' : 'transparent';
+                    }
+                };
+                tmp.src = src;
+            } catch (e) {
+                imgEl.style.objectFit = alwaysContain ? 'contain' : 'cover';
+            }
+        }
+
+        /* Download/Edit/Fullscreen functions removed per user request */
+
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateGalleryDisplay();
+        }
+
+        function prevPhoto() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateGalleryDisplay();
+        }
+
+        function selectPhoto(index) {
+            currentIndex = index;
+            updateGalleryDisplay();
+        }
+
+        function toggleAutoplay() {
+            isAutoplay = !isAutoplay;
+            const btnText = document.getElementById('autoplay-text');
+            const btnIcon = document.getElementById('autoplay-icon');
+
+            if (isAutoplay) {
+                btnText.innerText = 'Pause';
+                btnIcon.className = 'fas fa-pause';
+                autoplayTimer = setInterval(nextPhoto, 4000);
+            } else {
+                btnText.innerText = 'Auto Play';
+                btnIcon.className = 'fas fa-play';
+                clearInterval(autoplayTimer);
+            }
+        }
+
+        // Lightbox Functions
+        function renderLightbox() {
+            const img = document.getElementById('lightbox-img');
+            const note = document.getElementById('lightbox-note');
+
+            img.src = photos[currentIndex].url;
+            note.innerText = `"${photos[currentIndex].note}"`;
+            adjustImageFit(img, photos[currentIndex].url, true);
+        }
+
+        function openLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            renderLightbox();
+            modal.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+        }
+
+        function nextPhotoInLightbox() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateGalleryDisplay();
+            renderLightbox();
+        }
+
+        function prevPhotoInLightbox() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateGalleryDisplay();
+            renderLightbox();
+        }
+
+        // Promise Modal Functions
+        function openPromiseModal() {
+            showerLove();
+            document.getElementById('promise-modal').classList.remove('hidden');
+        }
+
+        function closePromiseModal() {
+            document.getElementById('promise-modal').classList.add('hidden');
+        }
+
+        // Confetti & Petals Burst
+        function showerLove() {
+            // Confetti burst
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ffd1e8', '#ffb6d2', '#ff78b6', '#f7a1c2']
+                });
+            }
+
+            // Heart shower burst (temporary elements)
+            const container = document.getElementById('hearts-container');
+            const icons = ['❤️', '💖', '💕', '🌸', '✨'];
+
+            for (let i = 0; i < 30; i++) {
+                const h = document.createElement('div');
+                h.className = 'shower-heart';
+                // start around center-top area
+                h.style.left = (50 + (Math.random() - 0.5) * 40) + '%';
+                h.style.top = (50 + (Math.random() - 0.5) * 10) + '%';
+                const sx = Math.floor((Math.random() - 0.5) * 300) + 'px';
+                h.style.setProperty('--sx', sx);
+                h.style.fontSize = (12 + Math.random() * 30) + 'px';
+                h.innerText = icons[Math.floor(Math.random() * icons.length)];
+                container.appendChild(h);
+
+                // remove after animation
+                setTimeout(() => {
+                    h.remove();
+                }, 2200 + Math.random() * 600);
+            }
+        }
+
+        // Open Surprise Envelope
+        function openSurprise() {
+            const surpriseScreen = document.getElementById('surprise-screen');
+            const envelope = document.querySelector('.envelope');
+
+            envelope.classList.add('open');
+            showerLove();
+            startAudioSynth();
+
+            setTimeout(() => {
+                surpriseScreen.style.opacity = '0';
+                setTimeout(() => {
+                    surpriseScreen.style.display = 'none';
+                }, 1000);
+            }, 800);
+        }
+
+        // Web Audio Synthesizer for Romantic Melody
+        function startAudioSynth() {
+            if (isAudioPlaying) return;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!audioCtx) audioCtx = new AudioContext();
+
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                isAudioPlaying = true;
+                document.getElementById('audio-icon').className = 'fas fa-volume-up text-rose-600';
+
+                // Romantic chord notes (C maj 7 / F maj 7 arpeggios)
+                const notes = [261.63, 329.63, 392.00, 493.88, 349.23, 440.00, 523.25, 659.25];
+                let noteIdx = 0;
+
+                synthInterval = setInterval(() => {
+                    if (!isAudioPlaying) return;
+
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.value = notes[noteIdx % notes.length];
+
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.8);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 1.8);
+
+                    noteIdx++;
+                }, 600);
+            } catch (e) {
+                console.log('Audio Context error or blocked:', e);
+            }
+        }
+
+        function toggleAudio() {
+            if (isAudioPlaying) {
+                isAudioPlaying = false;
+                if (synthInterval) clearInterval(synthInterval);
+                document.getElementById('audio-icon').className = 'fas fa-volume-mute text-rose-400';
+            } else {
+                startAudioSynth();
+            }
+        }
+
+        // Floating Hearts background animation
+        function generateHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartIcons = ['❤️', '💖', '🌸', '✨', '💕'];
+
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${6 + Math.random() * 6}s`;
+                heart.style.animationDelay = `${Math.random() * 8}s`;
+                heart.style.fontSize = `${14 + Math.random() * 16}px`;
+                container.appendChild(heart);
+            }
+        }
+
+        // Initialize everything on load
+        window.onload = () => {
+            updateCounters();
+            initGallery();
+            generateHearts();
+            setInterval(updateCounters, 60000); // refresh timer every minute
+        };
+    </script>
+</body>
+</html>
